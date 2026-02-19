@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zyrox | Elite Discord Defense & Automation</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;300;400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- AOS for Scroll Animations -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <style>
+        :root {
+            --crimson-base: #ff1a1a;
+            --crimson-deep: #4a0000;
+            --obsidian: #020202;
+            --glass: rgba(255, 255, 255, 0.02);
+            --glass-border: rgba(255, 255, 255, 0.08);
+        }
+
+        body {
+            background-color: var(--obsidian);
+            color: #ffffff;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            overflow-x: hidden;
+            letter-spacing: -0.01em;
+            cursor: none; /* Custom Cursor */
+        }
+
+        h1, h2, h3, .font-heading {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        /* Custom Cursor */
+        #cursor {
+            width: 20px;
+            height: 20px;
+            background: #fff;
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            mix-blend-mode: difference;
+            transition: transform 0.1s ease-out;
+        }
+
+        #cursor-follower {
+            width: 40px;
+            height: 40px;
+            border: 1px solid rgba(255, 26, 26, 0.5);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9998;
+            transition: all 0.3s ease-out;
+        }
+
+        /* Cinematic Backgrounds */
+        .bg-mesh {
+            background-image: 
+                radial-gradient(at 0% 0%, hsla(0,100%,10%,1) 0, transparent 50%), 
+                radial-gradient(at 100% 0%, hsla(0,100%,5%,1) 0, transparent 50%),
+                radial-gradient(at 50% 100%, hsla(0,100%,15%,0.2) 0, transparent 50%);
+        }
+
+        .grid-overlay {
+            background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            mask-image: radial-gradient(ellipse at center, black, transparent 90%);
+        }
+
+        /* Glassmorphism & Hover */
+        .glass-panel {
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .bento-item:hover .glass-panel {
+            border-color: rgba(255, 26, 26, 0.5);
+            transform: scale(1.02) translateY(-10px);
+            background: rgba(255, 255, 255, 0.05);
+            box-shadow: 0 20px 80px -20px rgba(255, 26, 26, 0.2);
+        }
+
+        /* Shimmer Typography */
+        .text-shimmer {
+            background: linear-gradient(90deg, #555, #fff, #555);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shimmer 5s linear infinite;
+        }
+
+        @keyframes shimmer {
+            to { background-position: 200% center; }
+        }
+
+        /* Magnetic Button */
+        .btn-elite {
+            position: relative;
+            background: #ffffff;
+            color: #000000;
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+
+        .btn-elite::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: var(--crimson-base);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s ease, height 0.6s ease;
+            z-index: -1;
+        }
+
+        .btn-elite:hover {
+            color: #fff;
+        }
+
+        .btn-elite:hover::before {
+            width: 300%;
+            height: 300%;
+        }
+
+        /* Bento Grid Layout */
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: repeat(2, 350px);
+            gap: 1.5rem;
+        }
+
+        @media (max-width: 1024px) {
+            .bento-grid {
+                grid-template-columns: repeat(1, 1fr);
+                grid-template-rows: auto;
+            }
+        }
+
+        /* Hero Image Glow */
+        .hero-avatar-wrap {
+            position: relative;
+        }
+
+        .hero-avatar-wrap::after {
+            content: '';
+            position: absolute;
+            inset: -20px;
+            background: var(--crimson-base);
+            filter: blur(100px);
+            opacity: 0.15;
+            z-index: -1;
+            border-radius: 50%;
+            animation: pulse-glow 4s ease-in-out infinite;
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { transform: scale(1); opacity: 0.15; }
+            50% { transform: scale(1.2); opacity: 0.25; }
+        }
+
+        /* Hide Scrollbar for clean look */
+        body::-webkit-scrollbar { display: none; }
+    </style>
+</head>
+<body class="bg-mesh">
+    <!-- Dynamic Elements -->
+    <div id="cursor"></div>
+    <div id="cursor-follower"></div>
+    <div class="fixed inset-0 grid-overlay pointer-events-none"></div>
+    
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-[100] px-6 py-8 transition-all duration-500" id="navbar">
+        <div class="max-w-7xl mx-auto flex justify-between items-center glass-panel px-8 py-4 rounded-3xl">
+            <div class="flex items-center space-x-4">
+                <img src="https://cdn.discordapp.com/avatars/1457700323199291436/f08799db8ff5a5e9002fe8d88f085e00.png?size=128" alt="Zyrox" class="w-10 h-10 rounded-xl shadow-2xl border border-white/10">
+                <span class="text-2xl font-bold tracking-tighter uppercase font-heading italic">Zyrox</span>
+            </div>
+            <div class="hidden lg:flex space-x-12 text-[10px] font-bold uppercase tracking-[0.4em] text-gray-500">
+                <a href="#features" class="hover:text-red-500 transition-colors">Protocol</a>
+                <a href="#vision" class="hover:text-red-500 transition-colors">Vision</a>
+                <a href="#deploy" class="hover:text-red-500 transition-colors">Deploy</a>
+            </div>
+            <a href="https://discord.com/oauth2/authorize?client_id=1457700323199291436&permissions=8&integration_type=0&scope=bot" 
+               class="btn-elite px-8 py-3 rounded-2xl text-[10px] font-bold uppercase tracking-widest">
+                INITIALIZE
+            </a>
+        </div>
+    </nav>
+
+    <main class="relative z-10">
+        <!-- HERO -->
+        <section class="min-h-screen flex flex-col justify-center items-center px-6 pt-32 text-center">
+            <div data-aos="fade-up" data-aos-duration="1000">
+                <div class="inline-flex items-center space-x-3 mb-10 px-5 py-2 rounded-full border border-white/5 bg-white/5 backdrop-blur-xl">
+                    <div class="w-2 h-2 rounded-full bg-red-600 animate-pulse shadow-[0_0_10px_#ff1a1a]"></div>
+                    <span class="text-[10px] font-bold uppercase tracking-[0.3em] text-white/60">System Status: Optimal</span>
+                </div>
+
+                <h1 class="text-7xl md:text-[140px] font-extrabold tracking-[-0.06em] leading-[0.85] mb-10 text-shimmer">
+                    SERVER <br> FORTRESS.
+                </h1>
+                
+                <p class="max-w-2xl mx-auto text-xl text-gray-400 font-light leading-relaxed mb-16 px-4" data-aos="fade-up" data-aos-delay="200">
+                    Engineered for the 0.1%. Zyrox delivers a sovereign defensive layer for high-capital Discord networks and global gaming ecosystems.
+                </p>
+
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-8" data-aos="fade-up" data-aos-delay="400">
+                    <a href="https://discord.com/oauth2/authorize?client_id=1457700323199291436&permissions=8&integration_type=0&scope=bot" 
+                       class="btn-elite px-16 py-6 rounded-3xl text-sm font-bold uppercase tracking-widest shadow-2xl">
+                        Deploy Infrastructure
+                    </a>
+                    <a href="#features" class="text-white/40 hover:text-white text-xs font-bold uppercase tracking-[0.4em] transition-all">
+                        Explore Protocols ↓
+                    </a>
+                </div>
+            </div>
+
+            <div class="mt-32 hero-avatar-wrap" data-aos="zoom-in" data-aos-duration="1500">
+                <img src="https://cdn.discordapp.com/avatars/1457700323199291436/f08799db8ff5a5e9002fe8d88f085e00.png?size=1024" 
+                     alt="Zyrox Core" 
+                     class="w-48 h-48 md:w-80 md:h-80 rounded-[4rem] border border-white/5 shadow-2xl rotate-3 hover:rotate-0 transition-transform duration-700">
+            </div>
+        </section>
+
+        <!-- BENTO SYSTEMS -->
+        <section id="features" class="py-48 px-6">
+            <div class="max-w-7xl mx-auto">
+                <div class="flex flex-col md:flex-row justify-between items-end mb-24 gap-8" data-aos="fade-right">
+                    <div>
+                        <h2 class="text-5xl md:text-8xl font-bold tracking-tighter font-heading">The Modules.</h2>
+                        <p class="text-gray-500 text-xl font-light mt-4">Hardware-level precision, cloud-scale defense.</p>
+                    </div>
+                    <div class="text-right hidden md:block">
+                        <span class="text-red-600 font-bold text-6xl tracking-tighter italic">99.9%</span>
+                        <p class="text-gray-600 uppercase tracking-widest text-[10px] font-bold">Uptime Reliability</p>
+                    </div>
+                </div>
+
+                <div class="bento-grid">
+                    <!-- Anti-Nuke -->
+                    <div class="bento-item col-span-2" data-aos="fade-up">
+                        <div class="glass-panel h-full p-12 rounded-[3rem] relative overflow-hidden group">
+                            <div class="absolute -right-20 -top-20 w-64 h-64 bg-red-600/10 blur-[80px] rounded-full"></div>
+                            <h3 class="text-4xl font-bold mb-6 font-heading">Hardened <br>Anti-Nuke</h3>
+                            <p class="text-gray-400 text-lg font-light leading-relaxed max-w-sm mb-12">
+                                Absolute control over administrative mutations. Zyrox intercepts and neutralizes malicious bulk edits instantly.
+                            </p>
+                            <div class="flex space-x-4">
+                                <div class="px-4 py-2 rounded-full border border-red-500/30 text-[10px] font-bold text-red-500 uppercase tracking-widest">Preemptive</div>
+                                <div class="px-4 py-2 rounded-full border border-white/10 text-[10px] font-bold text-white/40 uppercase tracking-widest">SLA Guaranteed</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Threat IQ -->
+                    <div class="bento-item" data-aos="fade-up" data-aos-delay="100">
+                        <div class="glass-panel h-full p-10 rounded-[3rem] flex flex-col justify-between">
+                            <div class="w-16 h-16 bg-white/5 rounded-2xl flex items-center justify-center mb-8">
+                                <svg class="w-8 h-8 text-white/40" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                            </div>
+                            <div>
+                                <h3 class="text-2xl font-bold mb-2 font-heading">Threat IQ</h3>
+                                <p class="text-sm text-gray-500 font-light">Global blacklist synchronization across all clusters.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Rust Core -->
+                    <div class="bento-item" data-aos="fade-up" data-aos-delay="200">
+                        <div class="glass-panel h-full p-10 rounded-[3rem] bg-gradient-to-br from-red-950/20 to-transparent">
+                            <div class="h-full flex flex-col justify-between">
+                                <span class="text-[10px] font-bold uppercase tracking-[0.4em] text-red-600">Infrastructure</span>
+                                <h3 class="text-2xl font-bold font-heading">0ms Core Execution</h3>
+                                <div class="w-full bg-white/10 h-1 rounded-full overflow-hidden">
+                                    <div class="bg-red-600 h-full w-full animate-[shimmer_2s_infinite]"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Automation -->
+                    <div class="bento-item col-span-2" data-aos="fade-up">
+                        <div class="glass-panel h-full p-12 rounded-[3rem] flex items-center gap-10">
+                            <div class="flex-1">
+                                <h3 class="text-3xl font-bold mb-4 font-heading">Elite Automation</h3>
+                                <p class="text-gray-400 font-light">From automated onboarding to sophisticated role management. We handle the friction.</p>
+                            </div>
+                            <div class="hidden md:flex flex-col gap-3">
+                                <div class="w-32 h-2 bg-white/5 rounded-full"></div>
+                                <div class="w-48 h-2 bg-red-600/20 rounded-full"></div>
+                                <div class="w-24 h-2 bg-white/5 rounded-full"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Governance -->
+                    <div class="bento-item col-span-2" data-aos="fade-up" data-aos-delay="100">
+                        <div class="glass-panel h-full p-12 rounded-[3rem] flex flex-col justify-end">
+                            <h3 class="text-3xl font-bold mb-4 font-heading">Governance Suite</h3>
+                            <p class="text-gray-400 font-light max-w-md">Professional moderation tools for servers exceeding 100k+ members. No limits.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- VISION -->
+        <section id="vision" class="py-48 px-6 relative overflow-hidden">
+            <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-24">
+                <div class="flex-1" data-aos="fade-right">
+                    <h2 class="text-6xl font-extrabold tracking-tighter mb-10 font-heading">The Architects of <br><span class="text-red-600 italic">Defense.</span></h2>
+                    <p class="text-gray-400 text-xl font-light leading-relaxed mb-12">
+                        Zyrox was built on the principle that digital assets deserve physical-grade protection. Founders <span class="text-white font-bold">Łiͥvinͣgͫ_ʜᴛ₄ᴳᵒᵈ</span> and <span class="text-white font-bold">OpSiond</span> designed a system that removes the human element from security.
+                    </p>
+                    <div class="grid grid-cols-2 gap-8 border-t border-white/5 pt-12">
+                        <div>
+                            <p class="text-xs font-bold uppercase tracking-widest text-red-600 mb-2">Network Reach</p>
+                            <p class="text-3xl font-bold font-heading">500k+ Protected</p>
+                        </div>
+                        <div>
+                            <p class="text-xs font-bold uppercase tracking-widest text-red-600 mb-2">Threats Blocked</p>
+                            <p class="text-3xl font-bold font-heading">2M+ Quarterly</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex-1 relative" data-aos="zoom-in-left">
+                    <div class="absolute inset-0 bg-red-600/30 blur-[120px] rounded-full animate-pulse"></div>
+                    <img src="https://cdn.discordapp.com/avatars/1457700323199291436/f08799db8ff5a5e9002fe8d88f085e00.png?size=1024" 
+                         class="relative z-10 w-full max-w-md mx-auto grayscale hover:grayscale-0 transition-all duration-1000 rounded-[5rem] border border-white/10 shadow-3xl">
+                </div>
+            </div>
+        </section>
+
+        <!-- FINAL CTA -->
+        <section id="deploy" class="py-64 px-6 text-center relative">
+            <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--crimson-deep)_0%,_transparent_70%)] opacity-20"></div>
+            <div class="max-w-5xl mx-auto relative z-10" data-aos="zoom-up">
+                <h2 class="text-7xl md:text-9xl font-bold mb-12 tracking-tightest font-heading italic uppercase">Initialize <br> Security.</h2>
+                <div class="flex flex-col items-center gap-12">
+                    <a href="https://discord.com/oauth2/authorize?client_id=1457700323199291436&permissions=8&integration_type=0&scope=bot" 
+                       class="btn-elite px-24 py-8 rounded-[2rem] text-2xl font-bold uppercase tracking-widest hover:scale-105 transition-transform">
+                        Secure Server
+                    </a>
+                    <div class="text-gray-600 text-[10px] font-bold uppercase tracking-[0.5em]">Global Deployment Nodes Active</div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="py-24 px-10 border-t border-white/5 bg-black/80 backdrop-blur-3xl">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start gap-16">
+            <div class="max-w-xs">
+                <div class="text-3xl font-bold font-heading tracking-tighter italic mb-6">ZYROX.</div>
+                <p class="text-gray-500 text-sm font-light leading-relaxed">The industry standard for Discord community defense. Engineered for scale, optimized for absolute control.</p>
+            </div>
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-20">
+                <div class="flex flex-col space-y-4">
+                    <span class="text-red-600 text-[10px] font-bold uppercase tracking-widest">System</span>
+                    <a href="#" class="text-gray-400 hover:text-white transition">Protocol v4</a>
+                    <a href="#" class="text-gray-400 hover:text-white transition">Network Status</a>
+                </div>
+                <div class="flex flex-col space-y-4">
+                    <span class="text-red-600 text-[10px] font-bold uppercase tracking-widest">Connect</span>
+                    <a href="#" class="text-gray-400 hover:text-white transition">Discord HQ</a>
+                    <a href="#" class="text-gray-400 hover:text-white transition">Support</a>
+                </div>
+                <div class="hidden md:flex flex-col space-y-4">
+                    <span class="text-red-600 text-[10px] font-bold uppercase tracking-widest">Founders</span>
+                    <span class="text-gray-400">HT4God</span>
+                    <span class="text-gray-400">OpSiond</span>
+                </div>
+            </div>
+        </div>
+        <div class="max-w-7xl mx-auto mt-24 pt-12 border-t border-white/5 flex justify-between text-[10px] font-bold uppercase tracking-widest text-gray-700">
+            <span>© 2024 Zyrox Defense Systems</span>
+            <span>Developed for the Elite</span>
+        </div>
+    </footer>
+
+    <!-- AOS Animation Engine -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        // Initialize AOS
+        AOS.init({
+            once: true,
+            mirror: false
+        });
+
+        // Custom Cursor Logic
+        const cursor = document.querySelector('#cursor');
+        const follower = document.querySelector('#cursor-follower');
+        
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0)`;
+            follower.style.transform = `translate3d(${e.clientX - 10}px, ${e.clientY - 10}px, 0)`;
+        });
+
+        // Hover Effect on Cursor
+        document.querySelectorAll('a, button, .bento-item').forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                follower.style.transform += ' scale(2.5)';
+                follower.style.borderColor = '#ff1a1a';
+                cursor.style.transform += ' scale(0.5)';
+            });
+            el.addEventListener('mouseleave', () => {
+                follower.style.transform += ' scale(1)';
+                follower.style.borderColor = 'rgba(255, 26, 26, 0.5)';
+                cursor.style.transform += ' scale(1)';
+            });
+        });
+
+        // Navbar Blur on Scroll
+        window.addEventListener('scroll', () => {
+            const nav = document.querySelector('#navbar');
+            if (window.scrollY > 100) {
+                nav.style.paddingTop = '1rem';
+                nav.style.paddingBottom = '1rem';
+            } else {
+                nav.style.paddingTop = '2rem';
+                nav.style.paddingBottom = '2rem';
+            }
+        });
+
+        // Magnetic Button Effect (Simulated for UX)
+        const btns = document.querySelectorAll('.btn-elite');
+        btns.forEach(btn => {
+            btn.addEventListener('mousemove', (e) => {
+                const rect = btn.getBoundingClientRect();
+                const x = e.clientX - rect.left - rect.width / 2;
+                const y = e.clientY - rect.top - rect.height / 2;
+                btn.style.transform = `translate(${x * 0.2}px, ${y * 0.2}px)`;
+            });
+            btn.addEventListener('mouseleave', () => {
+                btn.style.transform = `translate(0px, 0px)`;
+            });
+        });
+    </script>
+</body>
+</html>
