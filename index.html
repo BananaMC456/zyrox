@@ -3,444 +3,492 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zyrox | Elite Discord Defense & Automation</title>
+    <title>PvP Tiers</title>
+    <link rel="icon" href="https://dbl-discord.usercontent.prism.gg/icons/1207931735485186130/2c52815797cec81dd5c63e3311dac184.png?size=256">
+    
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;300;400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <!-- AOS for Scroll Animations -->
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    <style>
-        :root {
-            --crimson-base: #ff1a1a;
-            --crimson-deep: #4a0000;
-            --obsidian: #020202;
-            --glass: rgba(255, 255, 255, 0.02);
-            --glass-border: rgba(255, 255, 255, 0.08);
-        }
-
-        body {
-            background-color: var(--obsidian);
-            color: #ffffff;
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            overflow-x: hidden;
-            letter-spacing: -0.01em;
-            cursor: none; /* Custom Cursor */
-        }
-
-        h1, h2, h3, .font-heading {
-            font-family: 'Space Grotesk', sans-serif;
-        }
-
-        /* Custom Cursor */
-        #cursor {
-            width: 20px;
-            height: 20px;
-            background: #fff;
-            border-radius: 50%;
-            position: fixed;
-            pointer-events: none;
-            z-index: 9999;
-            mix-blend-mode: difference;
-            transition: transform 0.1s ease-out;
-        }
-
-        #cursor-follower {
-            width: 40px;
-            height: 40px;
-            border: 1px solid rgba(255, 26, 26, 0.5);
-            border-radius: 50%;
-            position: fixed;
-            pointer-events: none;
-            z-index: 9998;
-            transition: all 0.3s ease-out;
-        }
-
-        /* Cinematic Backgrounds */
-        .bg-mesh {
-            background-image: 
-                radial-gradient(at 0% 0%, hsla(0,100%,10%,1) 0, transparent 50%), 
-                radial-gradient(at 100% 0%, hsla(0,100%,5%,1) 0, transparent 50%),
-                radial-gradient(at 50% 100%, hsla(0,100%,15%,0.2) 0, transparent 50%);
-        }
-
-        .grid-overlay {
-            background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
-            background-size: 60px 60px;
-            mask-image: radial-gradient(ellipse at center, black, transparent 90%);
-        }
-
-        /* Glassmorphism & Hover */
-        .glass-panel {
-            background: var(--glass);
-            backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
-            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
-        }
-
-        .bento-item:hover .glass-panel {
-            border-color: rgba(255, 26, 26, 0.5);
-            transform: scale(1.02) translateY(-10px);
-            background: rgba(255, 255, 255, 0.05);
-            box-shadow: 0 20px 80px -20px rgba(255, 26, 26, 0.2);
-        }
-
-        /* Shimmer Typography */
-        .text-shimmer {
-            background: linear-gradient(90deg, #555, #fff, #555);
-            background-size: 200% auto;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: shimmer 5s linear infinite;
-        }
-
-        @keyframes shimmer {
-            to { background-position: 200% center; }
-        }
-
-        /* Magnetic Button */
-        .btn-elite {
-            position: relative;
-            background: #ffffff;
-            color: #000000;
-            transition: all 0.3s ease;
-            overflow: hidden;
-        }
-
-        .btn-elite::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            background: var(--crimson-base);
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
-            transition: width 0.6s ease, height 0.6s ease;
-            z-index: -1;
-        }
-
-        .btn-elite:hover {
-            color: #fff;
-        }
-
-        .btn-elite:hover::before {
-            width: 300%;
-            height: 300%;
-        }
-
-        /* Bento Grid Layout */
-        .bento-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            grid-template-rows: repeat(2, 350px);
-            gap: 1.5rem;
-        }
-
-        @media (max-width: 1024px) {
-            .bento-grid {
-                grid-template-columns: repeat(1, 1fr);
-                grid-template-rows: auto;
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        dark: '#050505',
+                        panel: 'rgba(10, 10, 10, 0.85)',
+                        brand: '#FF6700', 
+                        border: 'rgba(255, 103, 0, 0.2)',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
             }
         }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
-        /* Hero Image Glow */
-        .hero-avatar-wrap {
-            position: relative;
+    <!-- Import Maps -->
+    <script type="importmap">
+        {
+            "imports": {
+                "react": "https://esm.sh/react@18.3.1",
+                "react-dom/client": "https://esm.sh/react-dom@18.3.1/client",
+                "framer-motion": "https://esm.sh/framer-motion@11.0.8?external=react,react-dom",
+                "lucide-react": "https://esm.sh/lucide-react@0.344.0?external=react,react-dom",
+                "firebase/app": "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js",
+                "firebase/auth": "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js",
+                "firebase/firestore": "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js"
+            }
+        }
+    </script>
+
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #050505; 
+            background-image: linear-gradient(to bottom, rgba(5, 5, 5, 0.85), rgba(5, 5, 5, 0.98)), url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSx6zuKmK6wlvDq1C-n_hCqmor0QQEosek3xg&s');
+            background-size: cover;
+            background-attachment: fixed;
+            color: white; 
+            margin: 0; 
+            padding: 0; 
+            overflow-x: hidden; 
         }
 
-        .hero-avatar-wrap::after {
-            content: '';
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #FF6700; border-radius: 10px; }
+
+        @keyframes shine {
+            0% { background-position: -200% center; }
+            100% { background-position: 200% center; }
+        }
+
+        .shine-gold { background: linear-gradient(90deg, #ffd700 0%, #fff3a0 25%, #ffd700 50%, #fff3a0 75%, #ffd700 100%); background-size: 200% auto; animation: shine 4s linear infinite; }
+        .shine-silver { background: linear-gradient(90deg, #c0c0c0 0%, #ffffff 25%, #c0c0c0 50%, #ffffff 75%, #c0c0c0 100%); background-size: 200% auto; animation: shine 4s linear infinite; }
+        .shine-bronze { background: linear-gradient(90deg, #cd7f32 0%, #ffbb77 25%, #cd7f32 50%, #ffbb77 75%, #cd7f32 100%); background-size: 200% auto; animation: shine 4s linear infinite; }
+
+        .glass { background: rgba(10, 10, 10, 0.7); backdrop-filter: blur(16px); border: 1px solid rgba(255, 103, 0, 0.15); }
+
+        .copy-success::after {
+            content: 'COPIED!';
             position: absolute;
-            inset: -20px;
-            background: var(--crimson-base);
-            filter: blur(100px);
-            opacity: 0.15;
-            z-index: -1;
-            border-radius: 50%;
-            animation: pulse-glow 4s ease-in-out infinite;
+            top: -20px;
+            right: 0;
+            font-size: 10px;
+            color: #FF6700;
+            font-weight: 900;
+            animation: fadeUp 1s forwards;
         }
 
-        @keyframes pulse-glow {
-            0%, 100% { transform: scale(1); opacity: 0.15; }
-            50% { transform: scale(1.2); opacity: 0.25; }
+        @keyframes fadeUp {
+            from { opacity: 1; transform: translateY(0); }
+            to { opacity: 0; transform: translateY(-10px); }
         }
-
-        /* Hide Scrollbar for clean look */
-        body::-webkit-scrollbar { display: none; }
     </style>
 </head>
-<body class="bg-mesh">
-    <!-- Dynamic Elements -->
-    <div id="cursor"></div>
-    <div id="cursor-follower"></div>
-    <div class="fixed inset-0 grid-overlay pointer-events-none"></div>
-    
-    <!-- Navigation -->
-    <nav class="fixed top-0 w-full z-[100] px-6 py-8 transition-all duration-500" id="navbar">
-        <div class="max-w-7xl mx-auto flex justify-between items-center glass-panel px-8 py-4 rounded-3xl">
-            <div class="flex items-center space-x-4">
-                <img src="https://cdn.discordapp.com/avatars/1457700323199291436/f08799db8ff5a5e9002fe8d88f085e00.png?size=128" alt="Zyrox" class="w-10 h-10 rounded-xl shadow-2xl border border-white/10">
-                <span class="text-2xl font-bold tracking-tighter uppercase font-heading italic">Zyrox</span>
-            </div>
-            <div class="hidden lg:flex space-x-12 text-[10px] font-bold uppercase tracking-[0.4em] text-gray-500">
-                <a href="#features" class="hover:text-red-500 transition-colors">Protocol</a>
-                <a href="#vision" class="hover:text-red-500 transition-colors">Vision</a>
-                <a href="#deploy" class="hover:text-red-500 transition-colors">Deploy</a>
-            </div>
-            <a href="https://discord.com/oauth2/authorize?client_id=1457700323199291436&permissions=8&integration_type=0&scope=bot" 
-               class="btn-elite px-8 py-3 rounded-2xl text-[10px] font-bold uppercase tracking-widest">
-                INITIALIZE
-            </a>
-        </div>
-    </nav>
+<body>
+    <div id="root"></div>
 
-    <main class="relative z-10">
-        <!-- HERO -->
-        <section class="min-h-screen flex flex-col justify-center items-center px-6 pt-32 text-center">
-            <div data-aos="fade-up" data-aos-duration="1000">
-                <div class="inline-flex items-center space-x-3 mb-10 px-5 py-2 rounded-full border border-white/5 bg-white/5 backdrop-blur-xl">
-                    <div class="w-2 h-2 rounded-full bg-red-600 animate-pulse shadow-[0_0_10px_#ff1a1a]"></div>
-                    <span class="text-[10px] font-bold uppercase tracking-[0.3em] text-white/60">System Status: Optimal</span>
+    <script type="text/babel" data-type="module">
+        import React, { useState, useEffect, useMemo } from 'react';
+        import { createRoot } from 'react-dom/client';
+        import { motion, AnimatePresence, useScroll, useSpring } from 'framer-motion';
+        import { 
+            Search, Shield, Lock, X, Plus, Trash2, Loader2, Trophy, 
+            Swords, Globe, Flame, Zap, Target, Crosshair, Crown, Copy, ExternalLink, Key, CheckCircle2
+        } from 'lucide-react';
+        import { initializeApp } from 'firebase/app';
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from 'firebase/auth';
+        import { getFirestore, collection, onSnapshot, doc, setDoc, deleteDoc, addDoc, getDoc } from 'firebase/firestore';
+
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'stealfun-tiers-v2';
+
+        const DEFAULT_PASS = "OpSiond0000";
+        const DISCORD_LINK = "https://discord.gg/stealfun";
+        const SERVER_IP = "play.stealfun.in";
+        const WEB_LOGO = "https://dbl-discord.usercontent.prism.gg/icons/1207931735485186130/2c52815797cec81dd5c63e3311dac184.png?size=256";
+
+        const CATEGORIES = [
+            { id: 'overall', name: 'Overall', icon: <Trophy className="w-4 h-4" /> },
+            { id: 'sword', name: 'Sword', icon: <Swords className="w-4 h-4" /> },
+            { id: 'mace', name: 'Mace', icon: <Zap className="w-4 h-4" /> },
+            { id: 'nethpot', name: 'NethPot', icon: <Flame className="w-4 h-4" /> },
+            { id: 'crystal', name: 'Crystal', icon: <Target className="w-4 h-4" /> },
+            { id: 'uhc', name: 'UHC', icon: <Globe className="w-4 h-4" /> },
+            { id: 'smpkit', name: 'SMP Kit', icon: <Crosshair className="w-4 h-4" /> },
+            { id: 'spear', name: 'Spear', icon: <Shield className="w-4 h-4" /> }
+        ];
+
+        const REGIONS = ['Global', 'NA', 'EU', 'AS', 'AU', 'SA'];
+        
+        const TIERS = [
+            { id: 'S+', name: 'S+ Tier', color: 'text-red-500', bg: 'bg-red-500/10', border: 'border-red-500/20' },
+            { id: 'S', name: 'S Tier', color: 'text-orange-500', bg: 'bg-orange-500/10', border: 'border-orange-500/20' },
+            { id: 'A', name: 'A Tier', color: 'text-purple-500', bg: 'bg-purple-500/10', border: 'border-purple-500/20' },
+            { id: 'B', name: 'B Tier', color: 'text-blue-500', bg: 'bg-blue-500/10', border: 'border-blue-500/20' },
+            { id: 'C', name: 'C Tier', color: 'text-green-500', bg: 'bg-green-500/10', border: 'border-green-500/20' },
+            { id: 'D', name: 'D Tier', color: 'text-gray-400', bg: 'bg-gray-400/10', border: 'border-gray-400/20' }
+        ];
+
+        function App() {
+            const [user, setUser] = useState(null);
+            const [players, setPlayers] = useState([]);
+            const [loading, setLoading] = useState(true);
+            const [activeCategory, setActiveCategory] = useState('overall');
+            const [activeRegion, setActiveRegion] = useState('Global');
+            const [searchQuery, setSearchQuery] = useState('');
+            const [isAdmin, setIsAdmin] = useState(false);
+            const [showAdminModal, setShowAdminModal] = useState(false);
+            const [copied, setCopied] = useState(false);
+
+            const { scrollYProgress } = useScroll();
+            const scaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30 });
+
+            useEffect(() => {
+                const initAuth = async () => {
+                    if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                        await signInWithCustomToken(auth, __initial_auth_token);
+                    } else {
+                        await signInAnonymously(auth);
+                    }
+                };
+                initAuth();
+                return onAuthStateChanged(auth, setUser);
+            }, []);
+
+            useEffect(() => {
+                if (!user) return;
+                const playersRef = collection(db, 'artifacts', appId, 'public', 'data', 'mc_players');
+                const unsubscribe = onSnapshot(playersRef, (snapshot) => {
+                    setPlayers(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+                    setLoading(false);
+                }, (err) => {
+                    console.error("Firestore loading error:", err);
+                    setLoading(false);
+                });
+                return () => unsubscribe();
+            }, [user]);
+
+            const filteredPlayers = useMemo(() => {
+                return players.filter(p => {
+                    const matchesSearch = p.name.toLowerCase().includes(searchQuery.toLowerCase());
+                    const matchesCategory = activeCategory === 'overall' || p.category === activeCategory;
+                    const matchesRegion = activeRegion === 'Global' || p.region === activeRegion;
+                    return matchesSearch && matchesCategory && matchesRegion;
+                });
+            }, [players, searchQuery, activeCategory, activeRegion]);
+
+            const groupedPlayers = useMemo(() => {
+                const grouped = {};
+                TIERS.forEach(t => grouped[t.id] = []);
+                filteredPlayers.forEach(p => {
+                    if (grouped[p.tier]) grouped[p.tier].push(p);
+                    else { if(!grouped['D']) grouped['D'] = []; grouped['D'].push(p); }
+                });
+                Object.keys(grouped).forEach(tier => {
+                    grouped[tier].sort((a, b) => (b.points || 0) - (a.points || 0));
+                });
+                return grouped;
+            }, [filteredPlayers]);
+
+            const copyIp = () => {
+                const el = document.createElement('textarea');
+                el.value = SERVER_IP;
+                document.body.appendChild(el);
+                el.select();
+                document.execCommand('copy');
+                document.body.removeChild(el);
+                setCopied(true);
+                setTimeout(() => setCopied(false), 2000);
+            };
+
+            if (loading) return (
+                <div className="min-h-screen flex flex-col items-center justify-center bg-black gap-4">
+                    <img src={WEB_LOGO} className="w-16 h-16 rounded-full animate-bounce shadow-[0_0_30px_rgba(255,103,0,0.5)]" />
+                    <Loader2 className="w-8 h-8 text-brand animate-spin" />
                 </div>
+            );
 
-                <h1 class="text-7xl md:text-[140px] font-extrabold tracking-[-0.06em] leading-[0.85] mb-10 text-shimmer">
-                    SERVER <br> FORTRESS.
-                </h1>
-                
-                <p class="max-w-2xl mx-auto text-xl text-gray-400 font-light leading-relaxed mb-16 px-4" data-aos="fade-up" data-aos-delay="200">
-                    Engineered for the 0.1%. Zyrox delivers a sovereign defensive layer for high-capital Discord networks and global gaming ecosystems.
-                </p>
+            return (
+                <div className="flex min-h-screen relative z-10 selection:bg-brand/40">
+                    <motion.div className="fixed top-0 left-0 right-0 h-1 bg-brand origin-left z-[100]" style={{ scaleX }} />
 
-                <div class="flex flex-col sm:flex-row items-center justify-center gap-8" data-aos="fade-up" data-aos-delay="400">
-                    <a href="https://discord.com/oauth2/authorize?client_id=1457700323199291436&permissions=8&integration_type=0&scope=bot" 
-                       class="btn-elite px-16 py-6 rounded-3xl text-sm font-bold uppercase tracking-widest shadow-2xl">
-                        Deploy Infrastructure
-                    </a>
-                    <a href="#features" class="text-white/40 hover:text-white text-xs font-bold uppercase tracking-[0.4em] transition-all">
-                        Explore Protocols ↓
-                    </a>
-                </div>
-            </div>
-
-            <div class="mt-32 hero-avatar-wrap" data-aos="zoom-in" data-aos-duration="1500">
-                <img src="https://cdn.discordapp.com/avatars/1457700323199291436/f08799db8ff5a5e9002fe8d88f085e00.png?size=1024" 
-                     alt="Zyrox Core" 
-                     class="w-48 h-48 md:w-80 md:h-80 rounded-[4rem] border border-white/5 shadow-2xl rotate-3 hover:rotate-0 transition-transform duration-700">
-            </div>
-        </section>
-
-        <!-- BENTO SYSTEMS -->
-        <section id="features" class="py-48 px-6">
-            <div class="max-w-7xl mx-auto">
-                <div class="flex flex-col md:flex-row justify-between items-end mb-24 gap-8" data-aos="fade-right">
-                    <div>
-                        <h2 class="text-5xl md:text-8xl font-bold tracking-tighter font-heading">The Modules.</h2>
-                        <p class="text-gray-500 text-xl font-light mt-4">Hardware-level precision, cloud-scale defense.</p>
-                    </div>
-                    <div class="text-right hidden md:block">
-                        <span class="text-red-600 font-bold text-6xl tracking-tighter italic">99.9%</span>
-                        <p class="text-gray-600 uppercase tracking-widest text-[10px] font-bold">Uptime Reliability</p>
-                    </div>
-                </div>
-
-                <div class="bento-grid">
-                    <!-- Anti-Nuke -->
-                    <div class="bento-item col-span-2" data-aos="fade-up">
-                        <div class="glass-panel h-full p-12 rounded-[3rem] relative overflow-hidden group">
-                            <div class="absolute -right-20 -top-20 w-64 h-64 bg-red-600/10 blur-[80px] rounded-full"></div>
-                            <h3 class="text-4xl font-bold mb-6 font-heading">Hardened <br>Anti-Nuke</h3>
-                            <p class="text-gray-400 text-lg font-light leading-relaxed max-w-sm mb-12">
-                                Absolute control over administrative mutations. Zyrox intercepts and neutralizes malicious bulk edits instantly.
-                            </p>
-                            <div class="flex space-x-4">
-                                <div class="px-4 py-2 rounded-full border border-red-500/30 text-[10px] font-bold text-red-500 uppercase tracking-widest">Preemptive</div>
-                                <div class="px-4 py-2 rounded-full border border-white/10 text-[10px] font-bold text-white/40 uppercase tracking-widest">SLA Guaranteed</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Threat IQ -->
-                    <div class="bento-item" data-aos="fade-up" data-aos-delay="100">
-                        <div class="glass-panel h-full p-10 rounded-[3rem] flex flex-col justify-between">
-                            <div class="w-16 h-16 bg-white/5 rounded-2xl flex items-center justify-center mb-8">
-                                <svg class="w-8 h-8 text-white/40" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-                            </div>
-                            <div>
-                                <h3 class="text-2xl font-bold mb-2 font-heading">Threat IQ</h3>
-                                <p class="text-sm text-gray-500 font-light">Global blacklist synchronization across all clusters.</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Rust Core -->
-                    <div class="bento-item" data-aos="fade-up" data-aos-delay="200">
-                        <div class="glass-panel h-full p-10 rounded-[3rem] bg-gradient-to-br from-red-950/20 to-transparent">
-                            <div class="h-full flex flex-col justify-between">
-                                <span class="text-[10px] font-bold uppercase tracking-[0.4em] text-red-600">Infrastructure</span>
-                                <h3 class="text-2xl font-bold font-heading">0ms Core Execution</h3>
-                                <div class="w-full bg-white/10 h-1 rounded-full overflow-hidden">
-                                    <div class="bg-red-600 h-full w-full animate-[shimmer_2s_infinite]"></div>
+                    {/* Sidebar */}
+                    <aside className="hidden md:flex flex-col w-72 fixed inset-y-0 left-0 glass border-r border-brand/20 z-40">
+                        <div className="p-8">
+                            <div className="flex items-center space-x-4 mb-3">
+                                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-brand to-orange-700 flex items-center justify-center shadow-lg border border-white/20">
+                                    <img src={WEB_LOGO} className="w-8 h-8 rounded-full" />
+                                </div>
+                                <div className="flex flex-col">
+                                    <span className="font-black text-2xl tracking-tighter leading-none">STEAL<span className="text-brand">FUN</span></span>
+                                    <span className="text-[10px] text-brand/70 font-bold uppercase tracking-[0.2em] mt-1">Tier System</span>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                        
+                        <nav className="flex-1 px-4 space-y-2 mt-4 overflow-y-auto custom-scrollbar">
+                            <div className="px-4 py-3 text-[10px] font-black text-gray-500 uppercase tracking-[0.3em]">Game Categories</div>
+                            {CATEGORIES.map(cat => (
+                                <motion.button
+                                    key={cat.id}
+                                    whileHover={{ scale: 1.05, x: 5, backgroundColor: 'rgba(255, 255, 255, 0.05)' }}
+                                    whileTap={{ scale: 0.95 }}
+                                    onClick={() => setActiveCategory(cat.id)}
+                                    className={`w-full flex items-center space-x-3 px-5 py-4 rounded-2xl transition-all duration-200 ${
+                                        activeCategory === cat.id 
+                                        ? 'bg-brand/10 text-brand border border-brand/40 shadow-lg' 
+                                        : 'text-gray-400 border border-transparent hover:text-white'
+                                    }`}
+                                >
+                                    {cat.icon}
+                                    <span className="font-bold text-sm">{cat.name}</span>
+                                </motion.button>
+                            ))}
+                        </nav>
 
-                    <!-- Automation -->
-                    <div class="bento-item col-span-2" data-aos="fade-up">
-                        <div class="glass-panel h-full p-12 rounded-[3rem] flex items-center gap-10">
-                            <div class="flex-1">
-                                <h3 class="text-3xl font-bold mb-4 font-heading">Elite Automation</h3>
-                                <p class="text-gray-400 font-light">From automated onboarding to sophisticated role management. We handle the friction.</p>
+                        <div className="p-6 border-t border-brand/10">
+                            <button onClick={() => setShowAdminModal(true)} className="w-full flex items-center justify-center space-x-2 px-4 py-4 rounded-2xl border border-brand/10 bg-black/40 text-gray-500 hover:text-brand hover:border-brand/50 transition-all">
+                                {isAdmin ? <Shield className="w-4 h-4" /> : <Lock className="w-4 h-4" />}
+                                <span className="font-black text-[10px] uppercase tracking-widest">{isAdmin ? 'ADMIN PANEL' : 'ACCESS'}</span>
+                            </button>
+                            <p className="text-[10px] text-center text-gray-600 mt-4 font-bold uppercase">OpSiond Creation</p>
+                        </div>
+                    </aside>
+
+                    {/* Main */}
+                    <main className="flex-1 md:ml-72 relative min-h-screen flex flex-col">
+                        <header className="sticky top-0 z-50 glass border-b border-brand/20 px-6 py-4 md:px-10 flex flex-col xl:flex-row items-center justify-between gap-6">
+                            <div className="relative w-full md:w-80">
+                                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-brand/50" />
+                                <input 
+                                    type="text" placeholder="Find a player..." value={searchQuery}
+                                    onChange={(e) => setSearchQuery(e.target.value)}
+                                    className="w-full bg-black/60 border border-brand/20 rounded-2xl pl-12 pr-4 py-3 text-sm focus:border-brand outline-none"
+                                />
                             </div>
-                            <div class="hidden md:flex flex-col gap-3">
-                                <div class="w-32 h-2 bg-white/5 rounded-full"></div>
-                                <div class="w-48 h-2 bg-red-600/20 rounded-full"></div>
-                                <div class="w-24 h-2 bg-white/5 rounded-full"></div>
+
+                            <div className="flex items-center space-x-3 w-full xl:w-auto justify-end">
+                                <a href={DISCORD_LINK} target="_blank" className="flex items-center space-x-3 bg-[#5865F2] hover:bg-[#4752c4] px-5 py-3 rounded-2xl transition-all shadow-lg hover:scale-105 active:scale-95 border border-white/10">
+                                    <svg className="w-5 h-5 fill-white" viewBox="0 0 24 24"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.086 2.157 2.419 0 1.334-.947 2.419-2.157 2.419zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.086 2.157 2.419 0 1.334-.946 2.419-2.157 2.419z"/></svg>
+                                    <span className="font-black text-[10px] tracking-widest text-white uppercase hidden sm:block">Discord</span>
+                                </a>
+
+                                <div onClick={copyIp} className={`relative flex items-center space-x-3 bg-white/5 hover:bg-white/10 px-5 py-3 rounded-2xl border border-brand/20 cursor-pointer group transition-all ${copied ? 'copy-success' : ''}`}>
+                                    <div className="flex flex-col items-end">
+                                        <span className="text-[9px] font-black text-brand uppercase tracking-widest">Connect</span>
+                                        <span className="text-sm font-extrabold text-white">{SERVER_IP}</span>
+                                    </div>
+                                    <Copy className="w-4 h-4 text-brand" />
+                                </div>
+                            </div>
+                        </header>
+
+                        <div className="flex-1 p-6 md:p-12 overflow-y-auto custom-scrollbar">
+                            <div className="max-w-7xl mx-auto space-y-20 pb-20">
+                                {TIERS.map(tier => {
+                                    const tierPlayers = groupedPlayers[tier.id];
+                                    if (!tierPlayers || tierPlayers.length === 0) return null;
+                                    return (
+                                        <motion.div key={tier.id} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} className="space-y-8">
+                                            <div className="flex items-center space-x-6">
+                                                <div className={`px-6 py-3 rounded-2xl font-black text-[11px] uppercase tracking-[0.4em] ${tier.bg} ${tier.color} border border-brand/30 shadow-2xl`}>{tier.name}</div>
+                                                <div className="h-[2px] flex-1 bg-gradient-to-r from-brand/40 to-transparent"></div>
+                                            </div>
+                                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                                                <AnimatePresence mode="popLayout">
+                                                    {tierPlayers.map((player, index) => (
+                                                        <PlayerCard key={player.id} player={player} index={index} tier={tier} isOverall={activeCategory === 'overall'} />
+                                                    ))}
+                                                </AnimatePresence>
+                                            </div>
+                                        </motion.div>
+                                    )
+                                })}
+                            </div>
+                        </div>
+
+                        <footer className="p-12 text-center border-t border-brand/10 glass">
+                            <p className="text-sm text-gray-500 font-medium tracking-wide">© 2024 StealFun Network. Crafted by <span className="text-brand font-black">OpSiond</span></p>
+                        </footer>
+                    </main>
+
+                    <AnimatePresence>
+                        {showAdminModal && (
+                            <AdminPanel onClose={() => setShowAdminModal(false)} isAdmin={isAdmin} setIsAdmin={setIsAdmin} players={players} db={db} appId={appId} />
+                        )}
+                    </AnimatePresence>
+                </div>
+            );
+        }
+
+        function PlayerCard({ player, index, tier, isOverall }) {
+            const isBedrock = player.name.startsWith('.');
+            const platformTag = isBedrock ? 'Bedrock' : 'Java';
+            const isTop3 = index < 3 && isOverall;
+            const medalClass = index === 0 ? 'shine-gold' : index === 1 ? 'shine-silver' : index === 2 ? 'shine-bronze' : '';
+
+            return (
+                <motion.div layout initial={{ opacity: 0, scale: 0.9 }} whileInView={{ opacity: 1, scale: 1 }} whileHover={{ y: -8, scale: 1.02, borderColor: '#FF6700' }} className={`group relative bg-panel border-2 ${isTop3 ? 'border-white/10' : 'border-brand/10'} rounded-[2rem] p-6 transition-all duration-500 overflow-hidden shadow-2xl`}>
+                    {isTop3 && <div className={`absolute inset-x-0 top-0 h-1.5 ${medalClass}`} />}
+                    <div className="relative flex items-center space-x-5">
+                        <div className="relative">
+                            <img src={`https://mc-heads.net/avatar/${player.name}/64`} className="w-16 h-16 rounded-2xl bg-black/60 border border-brand/30 p-1.5 shadow-2xl" onError={(e) => { e.target.src = 'https://mc-heads.net/avatar/Steve/64'; }} />
+                            <div className={`absolute -top-3 -left-3 w-8 h-8 rounded-full ${isTop3 ? medalClass : 'bg-brand'} flex items-center justify-center text-[10px] font-black text-white shadow-xl border-2 border-panel z-20`}>#{index + 1}</div>
+                        </div>
+                        <div>
+                            <h3 className="font-black text-white text-xl tracking-tight group-hover:text-brand transition-colors">{player.name}</h3>
+                            <div className="flex items-center gap-2 mt-1.5">
+                                <span className={`px-2.5 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest ${isBedrock ? 'bg-blue-600/20 text-blue-400' : 'bg-brand/20 text-brand'}`}>{platformTag}</span>
+                                <span className="text-[10px] font-bold text-gray-500 bg-white/5 px-2 py-0.5 rounded-md border border-white/5">{player.region}</span>
                             </div>
                         </div>
                     </div>
-
-                    <!-- Governance -->
-                    <div class="bento-item col-span-2" data-aos="fade-up" data-aos-delay="100">
-                        <div class="glass-panel h-full p-12 rounded-[3rem] flex flex-col justify-end">
-                            <h3 class="text-3xl font-bold mb-4 font-heading">Governance Suite</h3>
-                            <p class="text-gray-400 font-light max-w-md">Professional moderation tools for servers exceeding 100k+ members. No limits.</p>
-                        </div>
+                    <div className="mt-8 flex items-end justify-between border-t border-brand/10 pt-4">
+                        <div className="flex flex-col"><span className="text-[9px] uppercase tracking-widest text-gray-500 font-black mb-1">Rank Points</span><span className="text-2xl font-black text-brand leading-none">{player.points}</span></div>
+                        <div className={`px-4 py-1.5 rounded-xl bg-white/5 border border-white/10 ${tier.color} text-xs font-black`}>{tier.id}</div>
                     </div>
-                </div>
-            </div>
-        </section>
+                </motion.div>
+            );
+        }
 
-        <!-- VISION -->
-        <section id="vision" class="py-48 px-6 relative overflow-hidden">
-            <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-24">
-                <div class="flex-1" data-aos="fade-right">
-                    <h2 class="text-6xl font-extrabold tracking-tighter mb-10 font-heading">The Architects of <br><span class="text-red-600 italic">Defense.</span></h2>
-                    <p class="text-gray-400 text-xl font-light leading-relaxed mb-12">
-                        Zyrox was built on the principle that digital assets deserve physical-grade protection. Founders <span class="text-white font-bold">Łiͥvinͣgͫ_ʜᴛ₄ᴳᵒᵈ</span> and <span class="text-white font-bold">OpSiond</span> designed a system that removes the human element from security.
-                    </p>
-                    <div class="grid grid-cols-2 gap-8 border-t border-white/5 pt-12">
-                        <div>
-                            <p class="text-xs font-bold uppercase tracking-widest text-red-600 mb-2">Network Reach</p>
-                            <p class="text-3xl font-bold font-heading">500k+ Protected</p>
-                        </div>
-                        <div>
-                            <p class="text-xs font-bold uppercase tracking-widest text-red-600 mb-2">Threats Blocked</p>
-                            <p class="text-3xl font-bold font-heading">2M+ Quarterly</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="flex-1 relative" data-aos="zoom-in-left">
-                    <div class="absolute inset-0 bg-red-600/30 blur-[120px] rounded-full animate-pulse"></div>
-                    <img src="https://cdn.discordapp.com/avatars/1457700323199291436/f08799db8ff5a5e9002fe8d88f085e00.png?size=1024" 
-                         class="relative z-10 w-full max-w-md mx-auto grayscale hover:grayscale-0 transition-all duration-1000 rounded-[5rem] border border-white/10 shadow-3xl">
-                </div>
-            </div>
-        </section>
+        function AdminPanel({ onClose, isAdmin, setIsAdmin, players, db, appId }) {
+            const [pass, setPass] = useState('');
+            const [storedPass, setStoredPass] = useState(DEFAULT_PASS);
+            const [error, setError] = useState(false);
+            const [newName, setNewName] = useState('');
+            const [newCategory, setNewCategory] = useState('overall');
+            const [newRegion, setNewRegion] = useState('Global');
+            const [newTier, setNewTier] = useState('B');
+            const [newPoints, setNewPoints] = useState(0);
+            const [newAdminPass, setNewAdminPass] = useState('');
+            const [passStatus, setPassStatus] = useState('');
 
-        <!-- FINAL CTA -->
-        <section id="deploy" class="py-64 px-6 text-center relative">
-            <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--crimson-deep)_0%,_transparent_70%)] opacity-20"></div>
-            <div class="max-w-5xl mx-auto relative z-10" data-aos="zoom-up">
-                <h2 class="text-7xl md:text-9xl font-bold mb-12 tracking-tightest font-heading italic uppercase">Initialize <br> Security.</h2>
-                <div class="flex flex-col items-center gap-12">
-                    <a href="https://discord.com/oauth2/authorize?client_id=1457700323199291436&permissions=8&integration_type=0&scope=bot" 
-                       class="btn-elite px-24 py-8 rounded-[2rem] text-2xl font-bold uppercase tracking-widest hover:scale-105 transition-transform">
-                        Secure Server
-                    </a>
-                    <div class="text-gray-600 text-[10px] font-bold uppercase tracking-[0.5em]">Global Deployment Nodes Active</div>
-                </div>
-            </div>
-        </section>
-    </main>
+            useEffect(() => {
+                if (!db) return;
+                const fetchPass = async () => {
+                    // Correcting path: segment count must be even (6 segments)
+                    // /artifacts/{appId}/public/data/settings/admin
+                    try {
+                        const adminDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'settings', 'admin');
+                        const snap = await getDoc(adminDocRef);
+                        if (snap.exists()) setStoredPass(snap.data().password);
+                    } catch (e) {
+                        console.error("Auth config loading error:", e);
+                    }
+                };
+                fetchPass();
+            }, [db, appId]);
 
-    <footer class="py-24 px-10 border-t border-white/5 bg-black/80 backdrop-blur-3xl">
-        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start gap-16">
-            <div class="max-w-xs">
-                <div class="text-3xl font-bold font-heading tracking-tighter italic mb-6">ZYROX.</div>
-                <p class="text-gray-500 text-sm font-light leading-relaxed">The industry standard for Discord community defense. Engineered for scale, optimized for absolute control.</p>
-            </div>
-            <div class="grid grid-cols-2 md:grid-cols-3 gap-20">
-                <div class="flex flex-col space-y-4">
-                    <span class="text-red-600 text-[10px] font-bold uppercase tracking-widest">System</span>
-                    <a href="#" class="text-gray-400 hover:text-white transition">Protocol v4</a>
-                    <a href="#" class="text-gray-400 hover:text-white transition">Network Status</a>
-                </div>
-                <div class="flex flex-col space-y-4">
-                    <span class="text-red-600 text-[10px] font-bold uppercase tracking-widest">Connect</span>
-                    <a href="#" class="text-gray-400 hover:text-white transition">Discord HQ</a>
-                    <a href="#" class="text-gray-400 hover:text-white transition">Support</a>
-                </div>
-                <div class="hidden md:flex flex-col space-y-4">
-                    <span class="text-red-600 text-[10px] font-bold uppercase tracking-widest">Founders</span>
-                    <span class="text-gray-400">HT4God</span>
-                    <span class="text-gray-400">OpSiond</span>
-                </div>
-            </div>
-        </div>
-        <div class="max-w-7xl mx-auto mt-24 pt-12 border-t border-white/5 flex justify-between text-[10px] font-bold uppercase tracking-widest text-gray-700">
-            <span>© 2024 Zyrox Defense Systems</span>
-            <span>Developed for the Elite</span>
-        </div>
-    </footer>
+            const handleLogin = (e) => {
+                e.preventDefault();
+                if (pass === storedPass) setIsAdmin(true);
+                else { setError(true); setTimeout(() => setError(false), 2000); }
+            };
 
-    <!-- AOS Animation Engine -->
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <script>
-        // Initialize AOS
-        AOS.init({
-            once: true,
-            mirror: false
-        });
+            const handleAddPlayer = async (e) => {
+                e.preventDefault();
+                if (!newName.trim()) return;
+                try {
+                    await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'mc_players'), {
+                        name: newName.trim(),
+                        category: newCategory,
+                        region: newRegion,
+                        tier: newTier,
+                        points: Number(newPoints),
+                        addedAt: new Date().toISOString()
+                    });
+                    setNewName('');
+                    setNewPoints(0);
+                } catch (e) { console.error(e); }
+            };
 
-        // Custom Cursor Logic
-        const cursor = document.querySelector('#cursor');
-        const follower = document.querySelector('#cursor-follower');
-        
-        document.addEventListener('mousemove', (e) => {
-            cursor.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0)`;
-            follower.style.transform = `translate3d(${e.clientX - 10}px, ${e.clientY - 10}px, 0)`;
-        });
-
-        // Hover Effect on Cursor
-        document.querySelectorAll('a, button, .bento-item').forEach(el => {
-            el.addEventListener('mouseenter', () => {
-                follower.style.transform += ' scale(2.5)';
-                follower.style.borderColor = '#ff1a1a';
-                cursor.style.transform += ' scale(0.5)';
-            });
-            el.addEventListener('mouseleave', () => {
-                follower.style.transform += ' scale(1)';
-                follower.style.borderColor = 'rgba(255, 26, 26, 0.5)';
-                cursor.style.transform += ' scale(1)';
-            });
-        });
-
-        // Navbar Blur on Scroll
-        window.addEventListener('scroll', () => {
-            const nav = document.querySelector('#navbar');
-            if (window.scrollY > 100) {
-                nav.style.paddingTop = '1rem';
-                nav.style.paddingBottom = '1rem';
-            } else {
-                nav.style.paddingTop = '2rem';
-                nav.style.paddingBottom = '2rem';
+            const handleChangePassword = async (e) => {
+                e.preventDefault();
+                if (!newAdminPass.trim()) return;
+                try {
+                    const adminDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'settings', 'admin');
+                    await setDoc(adminDocRef, { password: newAdminPass.trim() });
+                    setStoredPass(newAdminPass.trim());
+                    setPassStatus('Updated!');
+                    setNewAdminPass('');
+                    setTimeout(() => setPassStatus(''), 3000);
+                } catch (e) { console.error(e); }
             }
-        });
 
-        // Magnetic Button Effect (Simulated for UX)
-        const btns = document.querySelectorAll('.btn-elite');
-        btns.forEach(btn => {
-            btn.addEventListener('mousemove', (e) => {
-                const rect = btn.getBoundingClientRect();
-                const x = e.clientX - rect.left - rect.width / 2;
-                const y = e.clientY - rect.top - rect.height / 2;
-                btn.style.transform = `translate(${x * 0.2}px, ${y * 0.2}px)`;
-            });
-            btn.addEventListener('mouseleave', () => {
-                btn.style.transform = `translate(0px, 0px)`;
-            });
-        });
+            return (
+                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/95 backdrop-blur-xl">
+                    <motion.div initial={{ scale: 0.9 }} animate={{ scale: 1 }} className="bg-panel border border-brand/40 rounded-[2.5rem] w-full max-w-3xl overflow-hidden shadow-2xl">
+                        <div className="p-8 border-b border-brand/20 flex justify-between items-center bg-brand/5">
+                            <div className="flex items-center space-x-4 text-brand">
+                                <Shield className="w-8 h-8" />
+                                <div><h2 className="text-2xl font-black uppercase tracking-widest leading-none">Security Center</h2></div>
+                            </div>
+                            <button onClick={onClose} className="p-3 hover:bg-white/10 rounded-2xl"><X /></button>
+                        </div>
+                        <div className="p-10">
+                            {!isAdmin ? (
+                                <form onSubmit={handleLogin} className="max-w-md mx-auto space-y-6 py-10">
+                                    <input type="password" placeholder="Passcode Required" value={pass} onChange={e => setPass(e.target.value)} className={`w-full bg-black/60 border ${error ? 'border-red-500' : 'border-brand/20'} rounded-3xl p-6 text-center text-xl focus:outline-none transition-all font-black tracking-[0.5em]`} />
+                                    <button className="w-full bg-brand text-white font-black py-5 rounded-3xl shadow-xl shadow-brand/40 uppercase tracking-widest">Authorize Access</button>
+                                </form>
+                            ) : (
+                                <div className="space-y-10">
+                                    <form onSubmit={handleAddPlayer} className="grid grid-cols-2 md:grid-cols-4 gap-4 p-6 bg-white/5 rounded-3xl border border-white/5">
+                                        <div className="col-span-2 space-y-2">
+                                            <label className="text-[10px] font-black text-gray-500 uppercase ml-2">IGN</label>
+                                            <input type="text" placeholder="e.g. .OpSiond" value={newName} onChange={e => setNewName(e.target.value)} className="w-full bg-black/60 border border-brand/20 rounded-2xl p-4 text-sm focus:border-brand outline-none" />
+                                        </div>
+                                        <div className="space-y-2">
+                                            <label className="text-[10px] font-black text-gray-500 uppercase ml-2">Points</label>
+                                            <input type="number" value={newPoints} onChange={e => setNewPoints(e.target.value)} className="w-full bg-black/60 border border-brand/20 rounded-2xl p-4 text-sm outline-none" />
+                                        </div>
+                                        <div className="space-y-2">
+                                            <label className="text-[10px] font-black text-gray-500 uppercase ml-2">Tier</label>
+                                            <select value={newTier} onChange={e => setNewTier(e.target.value)} className="w-full bg-black/60 border border-brand/20 rounded-2xl p-4 text-sm text-gray-400 outline-none">
+                                                {TIERS.map(t => <option key={t.id} value={t.id}>{t.name}</option>)}
+                                            </select>
+                                        </div>
+                                        <div className="col-span-full">
+                                            <button className="w-full bg-brand font-black py-4 rounded-2xl shadow-lg shadow-brand/30">REGISTER PLAYER</button>
+                                        </div>
+                                    </form>
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3 max-h-48 overflow-y-auto custom-scrollbar">
+                                        {players.map(p => (
+                                            <div key={p.id} className="flex items-center justify-between p-4 bg-black/40 rounded-2xl border border-white/5">
+                                                <span className="font-bold text-sm">{p.name} <span className="text-brand text-[10px] font-black ml-2">[{p.tier}]</span></span>
+                                                <button onClick={async () => await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'mc_players', p.id))} className="text-gray-600 hover:text-red-500 transition-colors"><Trash2 className="w-4 h-4" /></button>
+                                            </div>
+                                        ))}
+                                    </div>
+                                    {/* Admin Password Update */}
+                                    <div className="pt-6 border-t border-white/5">
+                                        <div className="flex items-center justify-between mb-4">
+                                            <h3 className="text-xs font-black text-gray-500 uppercase tracking-widest">Admin Credentials</h3>
+                                            {passStatus && <span className="text-[10px] text-green-500 flex items-center gap-1 font-bold"><CheckCircle2 className="w-3 h-3" /> {passStatus}</span>}
+                                        </div>
+                                        <form onSubmit={handleChangePassword} className="flex gap-4">
+                                            <input type="password" placeholder="New Admin Password" value={newAdminPass} onChange={e => setNewAdminPass(e.target.value)} className="flex-1 bg-black/40 border border-brand/20 rounded-2xl p-4 text-sm focus:border-brand outline-none" />
+                                            <button className="bg-white/5 border border-white/10 px-6 rounded-2xl hover:bg-white/10 transition-all font-black text-[10px] uppercase">Update Key</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    </motion.div>
+                </motion.div>
+            );
+        }
+
+        const root = createRoot(document.getElementById('root'));
+        root.render(<App />);
     </script>
 </body>
 </html>
