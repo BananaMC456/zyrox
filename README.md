@@ -1,2 +1,0 @@
-# zyrox
-our bot
